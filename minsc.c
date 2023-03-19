@@ -5,4 +5,5 @@
 void myFunc(void)
 {
     printf("Body of myFunc function.\n");
+    
 }
