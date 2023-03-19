@@ -1,13 +1,12 @@
 #include <stdio.h>
-
-
-int main(void)
+#include "minsc.h"
+// Para ver como se reinicia el build system de 
+// meson init --name server_side_c --build --force 
+int main()
 {
-    int x = 1;
-    
-    printf("the fuck\n");
-    printf("Hello, world!\n");
+    printf("Hello, World.\n");
+    myFunc();
+    fflush(stdout);
 
     return 0;
-    
 }
