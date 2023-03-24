@@ -1,7 +1,7 @@
 
 # server_side_c
 
-El punto es hacer un servidor en C con HTTP1.1
+El punto es hacer un servidor en C con HTTP/1.1
 Aquí es donde:
 
 - Daniel
@@ -62,3 +62,70 @@ Instalar
 ``` bash
 DESTDIR=/path/to/staging/root/borrardespues meson install -C builddir
 ```
+
+# Teoría
+
+## Sockets
+
+["a way to speak to other programs using standard Unix file descriptors"](https://man7.org/linux/man-pages/man2/socket.2.html)
+
+but also, everything in Unix is a file, entonces esto es una forma de IPC (Interprocess Comunication) sobre una red.
+
+para TCP vamos a necesitar:
+
+``` C
+int tcp_socket = socket(AF_INET, SOCK_STREAM, 0);
+```
+
+Para entender esa línea se requiere contexto.
+Porque ```socket()``` retorna el Unix File Handle (```int```).
+[AF_INET, SOCK_STREAM](https://man7.org/linux/man-pages/man7/ip.7.html),  tambien necesitan de más contexto.
+
+``` C
+int socket(int domain, int type, int protocol);
+#include <netinet/in.h>
+#include <netinet/ip.h> /*superset of previous*/ 
+//domain, type, y protocol
+
+```
+
+```domain : AF_INET``` se refiere IPv4 Internet protocols; ```AF_INET6``` sería para IPv6 Internet protocols.
+
+```type : SOCK_STREAM``` se refiere a que se va a abrir un stream socket, necesario para stream de bytes; ```SOCK_DGRAM``` necesario para manejo de datagramas.
+
+```protocol : 0``` sirve para lo que sea, ```IPPROTO_TCP``` para ```TCP```, ```IPPROTO_UDP``` para ```UDP```.
+
+## bind
+
+algo se supone que facil, asociar socket con puerto.
+Y casi lo es: pero hay que justificar un cast extraño:
+
+``` C
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); //declarando
+
+bind(int tcp_socket, (struct sockaddr *)&server_addr, sizeof(server_addr))// en practica
+```
+
+Primero, aquí se usa el File Descriptor que haya devuelto ```socket```.
+
+Segundo, se pide un ```sockaddr```. Basicamente, esto existe porque hay muchas diferencias entre las diferentes familias de protocolos, y sus tamaños, por tantp, para solucionar lidiar con esas diferencias, solo se pide que desde un struct que defina la informacion de un protocolo como ```sockaddr_in``` o ```sockaddr_in6``` simplemente se hace un cast a algo genérico. ```sockaddr``` es ese algo genérico.
+
+Entender la diferencia entre estos tipos además requiere algo de miseria con estandares de POSIX, C y sus compiladores, linux, y más networking.[Rabbbit](https://stackoverflow.com/questions/18609397/whats-the-difference-between-sockaddr-sockaddr-in-and-sockaddr-in6) [hole](https://stackoverflow.com/questions/48328708/c-create-a-sockaddr-struct) si quiere. Basicamente hay que hacer uso de los structs de diferentes familias, que deben ser casteables a este tipo, para tener algo más o menos general.
+
+## listen
+
+## accept
+
+## client connect()
+
+## recv()
+
+## send
+
+# Misc
+
+``` bash
+netstat
+```
+
+Puertos: DNS 53, SSH 22, HTTP 80.
