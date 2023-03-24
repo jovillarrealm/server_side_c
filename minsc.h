@@ -5,7 +5,6 @@
 void myFunc(void);
 
 // Aquí se va a llamar socket(), bind(), y listen(). Asume IPv4 de momento.
-int initialize_listening_port(FILE *, int, int)
-
+int initialize_listening_socket(FILE *, int, int);
 
 #endif

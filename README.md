@@ -114,6 +114,12 @@ Entender la diferencia entre estos tipos además requiere algo de miseria con es
 
 ## listen
 
+Este fue muy fácil, literal fue pasarle el socket, y el numero máximo de conecciones permitidas. A cada una se le asigna un pthread entonces el paralelismo de la máquina debe estar por ahí.
+
+``` C
+listen(tcp_socket, MAX_CONNECTIONS)
+```
+
 ## accept
 
 ## client connect()

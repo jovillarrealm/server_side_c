@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <sys/socket.h> // socket()
-#include <netinet/in.h> /*SOCK_STREAM*/
+#include <netinet/in.h> /*SOCK_STREAM, sockaddr_in*/
 #include <netinet/ip.h> /* superset of previous, AF_INET */
 
 #include "minsc.h"
