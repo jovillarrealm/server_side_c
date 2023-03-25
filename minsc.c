@@ -17,12 +17,11 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
     // socket() is fallible
     if (tcp_socket == -1)
     {
-        fprintf(logs, "Fallos al crear el socket\n");
+        fprintf(logs, "Error: socket()\n");
         fclose(logs);
         perror("Error al crear el socket");
         exit(1);
     }
-    fprintf(logs, "Se crea el socket");
 
     // sockaddr_in es de IPv4
     struct sockaddr_in server_addr = {
@@ -36,7 +35,7 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
 
     if ( bind(tcp_socket, (struct sockaddr *)&server_addr, (socklen_t) sizeof(server_addr)) == -1)
     {
-        fprintf(logs, "Fallos al bindear el socket con \n");
+        fprintf(logs, "Error: bind()\n");
         fclose(logs);
         perror("Error al bindear el socket");
         exit(1);
@@ -46,7 +45,7 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
 
     if (listen(tcp_socket, MAX_CONNECTIONS) == -1)
     {
-        fprintf(logs, "Fallos en socket con modo escucha \n");
+        fprintf(logs, "Error: listen()\n");
         fclose(logs);
         perror("Error al bindear el socket");
         exit(1);
