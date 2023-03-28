@@ -2,9 +2,10 @@
 #include <netinet/in.h> /*SOCK_STREAM, sockaddr_in*/
 #include <pthread.h>    /*pthreads and shit*/
 #include <sys/socket.h> // accept, sockaddr
+#include <stdlib.h>
 #include "minsc.h"
+#include "constants.h"
 
-#define MAX_CONNECTIONS 11
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
 
     fprintf(logs, "Inicio de sesión de loggeo, JAAAAAAA\n");
 
-    int server_tcp_socket_in = initialize_listening_port(logs, http_port, MAX_CONNECTIONS);
+    int server_tcp_socket_in = initialize_listening_socket(logs, http_port, MAX_CONNECTIONS);
     struct sockaddr_in client_addr_in;
     int client_socket;
     pthread_t thread_id;
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
             continue;
         };
 
-        if (pthread_create(&thread_id, NULL, handle_connection, &client_socket) != 0)
+        if (pthread_create(&thread_id, NULL, serve, &client_socket) != 0)
         {
             fprintf(logs, "Error: pthread_create()\n");
             perror("Error al crear un hilo para manejar la conexion entrante");

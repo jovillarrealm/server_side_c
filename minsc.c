@@ -2,8 +2,12 @@
 #include <sys/socket.h> // socket()
 #include <netinet/in.h> /*SOCK_STREAM, sockaddr_in*/
 #include <netinet/ip.h> /* superset of previous, AF_INET */
-
+#include <unistd.h> //read
+#include <stdlib.h> //exit
+#include "constants.h"
 #include "minsc.h"
+
+
 
 /*function definition*/
 void myFunc(void)
@@ -51,4 +55,22 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
         exit(1);
     }
     return tcp_socket;
+}
+
+void *serve(void *client_info)
+{
+    int client_socket = *(int *)client_info;
+    char request_string[MAX_REQUEST_LEN];
+    int socket_bytes = read(client_socket, request_string, MAX_REQUEST_LEN);
+    if (socket_bytes <= 0)
+    {
+        close(client_socket);
+        return NULL;
+    }
+    else{
+        request_string[socket_bytes] = '\0';
+    }
+
+    char response_string[MAX_RESPONSE_LEN];
+    return NULL;
 }
