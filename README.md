@@ -135,3 +135,15 @@ netstat
 ```
 
 Puertos: DNS 53, SSH 22, HTTP 80.
+
+# FIXME
+
+Vamos a necesitar implementar connection Keep alive, hacer uso de timers if so
+
+# Three way Handshake
+
+C ->syn=1                    S
+C <-ack=1; syn=1             S
+C ->ack=1                    S
+
+Connection: Keep alive ; que no sean conecciones shortlived, que se puedan hacer varios requests ahi.

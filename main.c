@@ -1,6 +1,6 @@
 #include <stdio.h>      // FILE
 #include <netinet/in.h> /*SOCK_STREAM, sockaddr_in*/
-#include <pthread.h>    /*pthreads and shit*/
+#include <pthread.h>    /*pthreads*/
 #include <sys/socket.h> // accept, sockaddr
 #include <stdlib.h>
 #include "minsc.h"
@@ -12,21 +12,22 @@ int main(int argc, char *argv[])
     if (argc != 4)
     {
         printf("Faltaron parámetros, son 4 en total\n");
+        exit(1);
     }
     int http_port = atoi(argv[1]);
 
     FILE *logs = fopen(argv[2], "a+"); // a+ (create + append) option will allow appending which is useful in a log file
     char *doc_root_folder = argv[3];
 
-    fprintf(logs, "Inicio de sesión de loggeo, JAAAAAAA\n");
+    fprintf(logs, "Inicio de sesión de loggeo\n");
 
-    int server_tcp_socket_in = initialize_listening_socket(logs, http_port, MAX_CONNECTIONS);
+    int tcp_socket_in = initialize_listening_socket(logs, http_port, MAX_CONNECTIONS);
     struct sockaddr_in client_addr_in;
     int client_socket;
     pthread_t thread_id;
     while (1)
     {
-        client_socket = accept(server_tcp_socket_in, (struct sockaddr *)&client_addr_in, (socklen_t *)sizeof(client_addr_in));
+        client_socket = accept(tcp_socket_in, (struct sockaddr *)&client_addr_in, (socklen_t *)sizeof(client_addr_in));
         if (client_socket == -1)
         {
             fprintf(logs, "Error: accept()\n");
