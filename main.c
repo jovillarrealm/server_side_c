@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     int tcp_socket_in = initialize_listening_socket(log_file, http_port, MAX_CONNECTIONS);
     struct sockaddr_in client_addr_in;
-    int client_socket;
+    int client_socket = -1;
     thread_args connection_info = {.socket_fd = client_socket, .log_file = log_file};
 
     pthread_t thread_id;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
             continue;
         };
 
-        if (pthread_create(&thread_id, NULL, serve, &client_socket) != 0)
+        if (pthread_create(&thread_id, NULL, serve, &connection_info) != 0)
         {
             fprintf(log_file, "Error: pthread_create()\n");
             perror("Error al crear un hilo para manejar la conexion entrante");
