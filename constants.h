@@ -8,6 +8,12 @@ extern int OK;
 extern int BAD_REQUEST;
 extern int NOT_FOUND;
 extern int BUFSIZE;
+//Lo que vamos a pasar al 
+typedef struct
+{
+    int socket_fd;
+    FILE *log_file;
+} thread_args;
 // #define TCP_MSG_MAX_LEN 524280 o 65535
 
 #endif

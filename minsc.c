@@ -8,7 +8,6 @@
 #include "minsc.h"
 
 
-
 /*function definition*/
 void myFunc(void)
 {
@@ -51,26 +50,32 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
     {
         fprintf(logs, "Error: listen()\n");
         fclose(logs);
-        perror("Error al bindear el socket");
+        perror("Error: listen()\n");
         exit(1);
     }
     return tcp_socket;
 }
 
-void *serve(void *client_info)
+void *serve(void *connection_info)
 {
-    int client_socket = *(int *)client_info;
+    // FIXME escribir logs aquí
+    thread_args thread_info = *(thread_args *)connection_info;
+    int client_socket = thread_info.socket_fd;
+    FILE* log_file = thread_info.log_file;
+
     char request_string[MAX_REQUEST_LEN];
     int socket_bytes = read(client_socket, request_string, MAX_REQUEST_LEN);
     if (socket_bytes <= 0)
     {
-        close(client_socket);
+        fprintf(log_file, "Error: read()\n");
         return NULL;
     }
     else{
         request_string[socket_bytes] = '\0';
+
     }
 
+    //FIXME parser de http
     char response_string[MAX_RESPONSE_LEN];
     return NULL;
 }

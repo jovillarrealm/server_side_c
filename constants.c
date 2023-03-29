@@ -5,3 +5,4 @@ int OK = 200;
 int BAD_REQUEST = 400;
 int NOT_FOUND = 404;
 int BUFSIZE = 4096;
+typedef struct thread_args;

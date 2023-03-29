@@ -1,5 +1,5 @@
 
-# server_side_c
+# **server_side_c**
 
 El punto es hacer un servidor en C con HTTP/1.1
 Aquí es donde:
@@ -10,16 +10,27 @@ Aquí es donde:
 
 vamos a estar haciendo cosas.
 
-## Inicio
+******
+
+## **Tabla de contenido**
+
+1. [Inicio](#inicio)
+2. [Teoría](#teoría)
+3. [Miscelánea](#misc)
+
+******
+
+# **Inicio**
 
 De momento se planea tener en una imagen de ubuntu de AWS, o algo, entonces en vez de lidiar con las mierdas de windows de no ser POSIX compliant con freaking sockets no es algo con lo que quiera lidiar.
 
-### Setup
+## **Setup**
 
 1. Prender un [WSL de ubuntu.](https://learn.microsoft.com/es-mx/windows/wsl/install) y [WSL en vscode.](https://code.visualstudio.com/docs/remote/wsl)
 2. Desde wsl se usa con [Meson.](https://mesonbuild.com/SimpleStart.html)
+3. Sino, CMakeTools.
 
-#### Detalles
+### **Detalles**
 
 |Compilador|Build|Debugger|
 |---|---|---|
@@ -63,7 +74,9 @@ Instalar
 DESTDIR=/path/to/staging/root/borrardespues meson install -C builddir
 ```
 
-# Teoría
+******
+
+# **Teoría**
 
 ## Sockets
 
@@ -110,7 +123,9 @@ Primero, aquí se usa el File Descriptor que haya devuelto ```socket```.
 
 Segundo, se pide un ```sockaddr```. Basicamente, esto existe porque hay muchas diferencias entre las diferentes familias de protocolos, y sus tamaños, por tantp, para solucionar lidiar con esas diferencias, solo se pide que desde un struct que defina la informacion de un protocolo como ```sockaddr_in``` o ```sockaddr_in6``` simplemente se hace un cast a algo genérico. ```sockaddr``` es ese algo genérico.
 
-Entender la diferencia entre estos tipos además requiere algo de miseria con estandares de POSIX, C y sus compiladores, linux, y más networking.[Rabbbit](https://stackoverflow.com/questions/18609397/whats-the-difference-between-sockaddr-sockaddr-in-and-sockaddr-in6) [hole](https://stackoverflow.com/questions/48328708/c-create-a-sockaddr-struct) si quiere. Basicamente hay que hacer uso de los structs de diferentes familias, que deben ser casteables a este tipo, para tener algo más o menos general.
+Entender la diferencia entre estos tipos además requiere algo de miseria con estandares de POSIX, C y sus compiladores, linux, y más networking.[Rabbit hole](https://stackoverflow.com/questions/18609397/whats-the-difference-between-sockaddr-sockaddr-in-and-sockaddr-in6) [hole](https://stackoverflow.com/questions/48328708/c-create-a-sockaddr-struct) si quiere. Basicamente hay que hacer uso de los structs de diferentes familias, que deben ser casteables a este tipo, para tener algo más o menos general.
+
+para bindear con puertos <1024 hay que correr el programa con sudo, porque solo ```root``` tiene acceso a esos puertos.
 
 ## listen
 
@@ -122,7 +137,11 @@ listen(tcp_socket, MAX_CONNECTIONS)
 
 ## accept
 
-## client connect()
+``` C
+client_socket = accept(tcp_socket_in, (struct sockaddr *)&client_addr_in, (socklen_t*)sizeof(client_addr_in));
+```
+
+## connect()
 
 ## recv()
 
@@ -143,7 +162,9 @@ Vamos a necesitar implementar connection Keep alive, hacer uso de timers if so
 # Three way Handshake
 
 C ->syn=1                    S
+
 C <-ack=1; syn=1             S
+
 C ->ack=1                    S
 
 Connection: Keep alive ; que no sean conecciones shortlived, que se puedan hacer varios requests ahi.
