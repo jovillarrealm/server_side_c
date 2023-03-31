@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     int tcp_socket_in = initialize_listening_socket(log_file, http_port, MAX_CONNECTIONS);
     struct sockaddr_in client_addr_in;
     int client_socket = -1;
-    thread_args connection_info = {.socket_fd = client_socket, .log_file = log_file};
+    thread_args connection_info = {.client_socket_fd = client_socket, .log_file = log_file};
 
     pthread_t thread_id;
     while (1)

@@ -60,7 +60,7 @@ int initialize_listening_socket(FILE *logs, int http_port, int MAX_CONNECTIONS)
 void *serve(void *connection_info)
 {
     thread_args thread_info = *(thread_args *)connection_info;
-    int client_socket = thread_info.socket_fd;
+    int client_socket = thread_info.client_socket_fd;
     FILE* log_file = thread_info.log_file;
 
     char request_string[MAX_REQUEST_LEN];
